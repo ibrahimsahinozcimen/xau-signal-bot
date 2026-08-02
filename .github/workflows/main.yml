@@ -1,4 +1,4 @@
-name: XAU Sinyal Botu
+name: XAU Signal Bot
 
 on:
   schedule:
@@ -10,20 +10,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Depoyu indir
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Python kur
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
-      - name: Gereksinimleri yükle
+      - name: Install dependencies
         run: |
-          pip install -r gereksinimler.txt
+          pip install -r requirements.txt
 
-      - name: Botu çalıştır
+      - name: Run bot
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
           CHAT_ID: ${{ secrets.CHAT_ID }}
-        run: python ana.py
+        run: python main.py
