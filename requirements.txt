@@ -1,7 +1,6 @@
 python-telegram-bot==21.10
 pandas
 numpy
-pandas-ta
 tradingview-ta
 requests
 schedule
