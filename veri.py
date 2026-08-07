@@ -1,12 +1,36 @@
-SYMBOL = "XAUUSD"
+import requests
+import pandas as pd
 
-TIMEFRAME_TREND = "1h"
-TIMEFRAME_SIGNAL = "15m"
-TIMEFRAME_ENTRY = "5m"
 
-MIN_SCORE = 80
+def get_data():
+    url = (
+        "https://query1.finance.yahoo.com/v8/finance/chart/GC=F"
+        "?period1=0&period2=9999999999"
+        "&interval=15m"
+        "&range=5d"
+    )
 
-NEWS_FILTER_BEFORE = 30
-NEWS_FILTER_AFTER = 30
+    headers = {
+        "User-Agent": "Mozilla/5.0"
+    }
 
-RISK_REWARD = 2
+    response = requests.get(url, headers=headers, timeout=20)
+    response.raise_for_status()
+
+    data = response.json()["chart"]["result"][0]
+
+    timestamps = data["timestamp"]
+    quote = data["indicators"]["quote"][0]
+
+    df = pd.DataFrame({
+        "time": pd.to_datetime(timestamps, unit="s"),
+        "open": quote["open"],
+        "high": quote["high"],
+        "low": quote["low"],
+        "close": quote["close"],
+        "volume": quote["volume"]
+    })
+
+    df = df.dropna()
+
+    return df
