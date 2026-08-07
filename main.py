@@ -1,12 +1,23 @@
+import os
+
 from veri import get_data
 from strateji import analiz_et
 from telegram_bot import send_message
-from config import BOT_TOKEN, CHAT_ID
+
+
+BOT_TOKEN = os.getenv("BOT_TOKEN")
+CHAT_ID = os.getenv("CHAT_ID")
 
 
 def main():
     print("XAU AI SIGNAL BOT")
     print("Bot baslatildi...")
+
+    if not BOT_TOKEN:
+        raise ValueError("BOT_TOKEN bulunamadi.")
+
+    if not CHAT_ID:
+        raise ValueError("CHAT_ID bulunamadi.")
 
     try:
         data = get_data()
