@@ -11,24 +11,30 @@ CHAT_ID = os.getenv("CHAT_ID")
 
 def main():
     print("XAU AI SIGNAL BOT")
-    print("Bot baslatildi...")
+    print("Bot started...")
 
     if not BOT_TOKEN:
-        raise ValueError("BOT_TOKEN bulunamadi.")
+        raise ValueError("BOT_TOKEN not found.")
 
     if not CHAT_ID:
-        raise ValueError("CHAT_ID bulunamadi.")
+        raise ValueError("CHAT_ID not found.")
 
     try:
         data = get_data()
 
         if data is None or data.empty:
-            print("Veri alinamadi.")
+            print("Data not received.")
             return
 
-        prices = data["close"].tolist()
+        highs = data["high"].tolist()
+        lows = data["low"].tolist()
+        closes = data["close"].tolist()
 
-        result = analiz_et(prices)
+        result = analiz_et(
+            highs,
+            lows,
+            closes
+        )
 
         print("Signal:", result["signal"])
         print("Score:", result["score"])
@@ -39,6 +45,10 @@ def main():
                 "XAUUSD SIGNAL\n\n"
                 f"Signal: {result['signal']}\n"
                 f"Score: {result['score']}\n"
+                f"Entry: {result['entry']:.2f}\n"
+                f"Stop Loss: {result['stop_loss']:.2f}\n"
+                f"Take Profit: {result['take_profit']:.2f}\n"
+                f"ATR: {result['atr']:.2f}\n\n"
                 f"Reason: {result['reason']}"
             )
 
